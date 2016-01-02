@@ -14,8 +14,8 @@
   (major1) == 0 && (major2) <  5 || \
   (major1) == 0 && (major2) == 5 && (minor) <= 6)
 
-/* package matrix-0.3.4.4 */
-#define VERSION_matrix "0.3.4.4"
+/* package matrix-0.3.4.5 */
+#define VERSION_matrix "0.3.4.5"
 #define MIN_VERSION_matrix(major1,major2,minor) (\
   (major1) <  0 || \
   (major1) == 0 && (major2) <  3 || \
@@ -105,5 +105,5 @@
   (major1) == 2 && (major2) <  25 || \
   (major1) == 2 && (major2) == 25 && (minor) <= 0)
 
-#define CURRENT_PACKAGE_KEY "TimeS_EFzfnvP6ZtNK0KtulowYrU"
+#define CURRENT_PACKAGE_KEY "TimeS_9yTlfdMvdMIIVpwFWy4sC7"
 
