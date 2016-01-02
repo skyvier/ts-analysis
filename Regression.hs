@@ -5,10 +5,17 @@ import Data.Matrix
 import Control.Monad (liftM)
 
 data Correlation = Constant | Linear | Squared deriving Show
-data Plot a = Plot { coefs :: Matrix a, values :: Matrix a, residuals :: Matrix a } deriving Show
+data Plot a = Plot { coefs :: Matrix a, values :: Matrix a, residuals :: Matrix a, correlation :: Correlation }
 
-plot :: Num a => Matrix a -> Matrix a -> Matrix a -> Plot a
-plot xs y coefs = Plot coefs values residuals
+instance (Show a) => Show (Plot a) where
+   show (Plot coefs values res cor) = 
+      "### " ++ show cor ++ " Plot ###\n\n" ++
+      "$ coefficients: \n" ++ show coefs ++ "\n" ++
+      "$ residuals: \n" ++ show res ++ "\n" ++
+      "$ fitted values: \n" ++ show values
+
+plot :: Num a => Matrix a -> Matrix a -> Correlation -> Matrix a -> Plot a
+plot xs y cor coefs = Plot coefs values residuals cor
    where values = calculateFittedValues coefs xs
          residuals = calculateResiduals y values
 
@@ -29,5 +36,5 @@ calculateResiduals :: Num a => Matrix a -> Matrix a -> Matrix a
 calculateResiduals y y' = (-) <$> y <*> y'
 
 plotFromMatrix :: (Ord a, Eq a, Fractional a) => Correlation -> Matrix a -> Matrix a -> Maybe (Plot a)
-plotFromMatrix Linear xs y = liftM (plot xs y) (leastSquaresEstimator xs y)
+plotFromMatrix Linear xs y = liftM (plot xs y Linear) (leastSquaresEstimator xs y)
 
