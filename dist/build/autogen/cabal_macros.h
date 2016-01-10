@@ -21,6 +21,13 @@
   (major1) == 0 && (major2) <  3 || \
   (major1) == 0 && (major2) == 3 && (minor) <= 4)
 
+/* package permutation-0.5.0.5 */
+#define VERSION_permutation "0.5.0.5"
+#define MIN_VERSION_permutation(major1,major2,minor) (\
+  (major1) <  0 || \
+  (major1) == 0 && (major2) <  5 || \
+  (major1) == 0 && (major2) == 5 && (minor) <= 0)
+
 /* tool alex-3.1.4 */
 #define TOOL_VERSION_alex "3.1.4"
 #define MIN_TOOL_VERSION_alex(major1,major2,minor) (\
@@ -105,5 +112,5 @@
   (major1) == 2 && (major2) <  25 || \
   (major1) == 2 && (major2) == 25 && (minor) <= 0)
 
-#define CURRENT_PACKAGE_KEY "TimeS_9yTlfdMvdMIIVpwFWy4sC7"
+#define CURRENT_PACKAGE_KEY "TimeS_6DvW5DvJYBP1Bji5uQVTZC"
 

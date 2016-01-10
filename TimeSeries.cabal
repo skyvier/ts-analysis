@@ -19,10 +19,10 @@ source-repository head
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Regression, TimeSeries
+  exposed-modules:     Regression, RegressionDiagnostics, TimeSeries
   -- other-modules:       
   other-extensions:    MultiParamTypeClasses, TypeSynonymInstances, FlexibleInstances, InstanceSigs
-  build-depends:       base >=4.8 && <4.9, containers >=0.5 && <0.6, matrix >= 0.3.4.5
+  build-depends:       base >=4.8 && <4.9, containers >=0.5 && <0.6, matrix >= 0.3.4.5, permutation >= 0.5.0.5
   -- hs-source-dirs:      
   default-language:    Haskell2010
     
