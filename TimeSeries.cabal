@@ -3,10 +3,8 @@
 
 name:                TimeSeries
 version:             0.1.0.0
--- synopsis:            
+synopsis:            Regression and time series analysis
 -- description:         
-license:             MIT
-license-file:        LICENSE
 author:              Joonas Laukka
 maintainer:          joonas.laukka@aalto.fi
 -- copyright:           
@@ -15,10 +13,16 @@ build-type:          Simple
 -- extra-source-files:  
 cabal-version:       >=1.10
 
+source-repository head
+  type: git
+  location: git://github.com/skyvier/ts-analysis.git
+
 library
+  hs-source-dirs:      src
   exposed-modules:     Regression, TimeSeries
   -- other-modules:       
   other-extensions:    MultiParamTypeClasses, TypeSynonymInstances, FlexibleInstances, InstanceSigs
   build-depends:       base >=4.8 && <4.9, containers >=0.5 && <0.6, matrix >= 0.3.4.5
   -- hs-source-dirs:      
   default-language:    Haskell2010
+    
