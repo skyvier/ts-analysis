@@ -11,7 +11,7 @@ presumed about the distribution of the source data.
 module RegressionDiagnostics where
 
 import Data.List (sortBy, elem, sort)
-import Data.Matrix (Matrix, fromLists, toLists, transpose)
+import Data.Matrix (Matrix, fromLists, toLists, toList, transpose)
 import Data.Permute hiding (sortBy)
 import Data.Maybe (fromMaybe, catMaybes)
 import Data.Function
@@ -88,9 +88,10 @@ permutationTest' tester plotter base targets n perm holder =
 
 rsquared :: Floating a => Plot a -> a
 rsquared plot = 1.0 - (sse / sst)
-   where sse = sum $ residuals plot
-         sst = sum $ map (subtract $ mean ys') ys'
-         ys' = head . toLists . ys $ base plot
+   where sse = sum $ map (** 2) res
+         sst = sum $ map ((** 2) . subtract (mean ys')) ys'
+         ys' = toList . ys . base $ plot
+         res = toList . residuals $ plot
          mean xs' = sum xs' / fromIntegral (length xs')
 
 -- * Permutation Tests
