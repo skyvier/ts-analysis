@@ -26,7 +26,7 @@ data Correlation = Constant | Linear | Squared deriving Show
 data Base a = Base
    { ys :: Matrix a               -- ^ The dependent variable data vector
    , xs :: Matrix a               -- ^ The independent variable data matrix
-   }
+   } deriving Show
 
 -- | Plot contains information about a regression estimate.
 data Plot a = Plot 

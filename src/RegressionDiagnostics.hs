@@ -94,6 +94,11 @@ rsquared plot = 1.0 - (sse / sst)
          res = toList . residuals $ plot
          mean xs' = sum xs' / fromIntegral (length xs')
 
+cooks :: Floating a 
+   => (Plot a, Plot a) 
+   -> a
+cooks = undefined
+
 -- * Permutation Tests
 
 -- | Function approximates the significance of a regression coefficient.
