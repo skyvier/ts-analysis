@@ -11,10 +11,12 @@ presumed about the distribution of the source data.
 module RegressionDiagnostics where
 
 import Data.List (sortBy, elem, sort)
-import Data.Matrix (Matrix, fromLists, toLists, toList, transpose)
+import Data.Matrix (Matrix, fromLists, toLists, toList, transpose, ncols)
 import Data.Permute hiding (sortBy)
 import Data.Maybe (fromMaybe, catMaybes)
 import Data.Function
+
+import Control.Monad (liftM)
 
 import Regression
 
@@ -86,6 +88,8 @@ permutationTest' tester plotter base targets n perm holder =
 
 -- * Test functions
 
+-- | R squared, cofficient of determination
+--   TODO: use the mse, sst, sse functions in Regression instead
 rsquared :: Floating a => Plot a -> a
 rsquared plot = 1.0 - (sse / sst)
    where sse = sum $ map (** 2) res
@@ -94,10 +98,13 @@ rsquared plot = 1.0 - (sse / sst)
          res = toList . residuals $ plot
          mean xs' = sum xs' / fromIntegral (length xs')
 
-cooks :: Floating a 
-   => (Plot a, Plot a) 
-   -> a
-cooks = undefined
+-- | Cooks distance function for observations specified on row.
+cooks :: (Floating a, Ord a) => Row -> Plot a -> Maybe a
+cooks row fullPlot = (\x -> x / (k * mse fullPlot)) <$> liftM (sum . map (** 2) . toList) diffMatrix
+   where partialPlot = subplot fullPlot row
+         partialFits = liftM (\x -> calculateFittedValues (coefs x) (xs . base $ fullPlot)) partialPlot
+         diffMatrix = liftM ((-) <$> values fullPlot <*>) partialFits
+         k = (fromIntegral . ncols) $ (xs . base) fullPlot
 
 -- * Permutation Tests
 

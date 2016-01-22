@@ -3,7 +3,6 @@
 - Hadock
 - Find Visualization tool 
 
-
 ## Modules
 - TimeSeries
    - Basic time series operations

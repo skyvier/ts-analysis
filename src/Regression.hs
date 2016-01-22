@@ -37,6 +37,9 @@ data Plot a = Plot
    , base :: Base a              -- ^ The measured base for the regression
    }
 
+type Row = Int
+type Column = Int
+
 -- * Instances
 
 -- | Show instance for plot.
@@ -60,6 +63,17 @@ plot xs y cor coefs = Plot coefs values residuals cor (Base y xs)
    where values = calculateFittedValues coefs xs
          residuals = calculateResiduals y values
 
+-- | Plots a subplot of a plot. That is, a plot that is 
+--   constructed without one of the observations.
+--   This can be useful when looking for possible error
+--   observations.
+subplot :: (Fractional a, Ord a, Eq a)
+   => Plot a         -- ^ The plot to subplot from
+   -> Row            -- ^ The row of observations to exclude 
+   -> Maybe (Plot a) -- ^ Maybe the subplot
+subplot plot row = newBase >>= plotFromBase (correlation plot)
+   where newBase = subbase (base plot) row
+
 -- | Calculates the fitted values based on an estimate.
 calculateFittedValues :: Num a 
    => Matrix a -- ^ Matrix for the estimated coefficients
@@ -73,6 +87,34 @@ calculateResiduals :: Num a
    -> Matrix a -- ^ The estimated values 
    -> Matrix a -- ^ Matrix of the residuals (difference between the first two)
 calculateResiduals y y' = (-) <$> y <*> y'
+
+-- | MSE, mean square error
+mse :: Floating a => Plot a -> a
+mse plot = sse plot / (fromIntegral . nrows . residuals) plot
+
+-- | SSE, sum of squares of residuals
+sse :: Floating a => Plot a -> a
+sse plot = sum $ map (** 2) res
+   where res = toList . residuals $ plot
+
+-- | SST, total sum of squares
+sst :: (Floating a, Fractional a) => Plot a -> a
+sst plot = sum $ map ((** 2) . subtract (mean ys')) ys'
+   where ys' = toList . ys . base $ plot
+         mean xs = sum xs / fromIntegral (length xs)
+
+-- | Manipulates the base by removing a row from the data.
+subbase :: Num a
+   => Base a         -- ^ The base to manipulate
+   -> Row            -- ^ The row to delete
+   -> Maybe (Base a) -- ^ Maybe the manipulated base
+subbase base row
+   | nrows (xs base) > row = 
+      Just $ base { xs = splitMatrix (xs base), ys = splitMatrix (ys base) }
+   | otherwise             = Nothing
+   where splitMatrix mat = let splits = splitArrays mat
+                           in fromLists ((init . fst) splits ++ snd splits)
+         splitArrays = splitAt (row Prelude.+ 1) . toLists
 
 -- | Allows combinations of correlation types.
 (+) :: Correlation -> Correlation -> [Correlation]
