@@ -17,7 +17,7 @@ version = Version [0,1,0,0] []
 bindir, libdir, datadir, libexecdir, sysconfdir :: FilePath
 
 bindir     = "/home/skyvier/Programming/haskell/projects/TimeSeries/.cabal-sandbox/bin"
-libdir     = "/home/skyvier/Programming/haskell/projects/TimeSeries/.cabal-sandbox/lib/x86_64-linux-ghc-7.10.3/TimeSeries-0.1.0.0-6DvW5DvJYBP1Bji5uQVTZC"
+libdir     = "/home/skyvier/Programming/haskell/projects/TimeSeries/.cabal-sandbox/lib/x86_64-linux-ghc-7.10.3/TimeSeries-0.1.0.0-7JelpdBgNQb9wHYYKkhSxY"
 datadir    = "/home/skyvier/Programming/haskell/projects/TimeSeries/.cabal-sandbox/share/x86_64-linux-ghc-7.10.3/TimeSeries-0.1.0.0"
 libexecdir = "/home/skyvier/Programming/haskell/projects/TimeSeries/.cabal-sandbox/libexec"
 sysconfdir = "/home/skyvier/Programming/haskell/projects/TimeSeries/.cabal-sandbox/etc"

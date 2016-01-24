@@ -20,13 +20,13 @@ import qualified Data.Map as Map
 
 -- | Correlation describes the some of the 
 --   most popular types of dependence.
-data Correlation = Constant | Linear | Squared deriving Show
+data Correlation = Constant | Linear | Squared deriving (Show, Eq)
 
 -- | Base contains the original data that a plot is based on.
 data Base a = Base
    { ys :: Matrix a               -- ^ The dependent variable data vector
    , xs :: Matrix a               -- ^ The independent variable data matrix
-   } deriving Show
+   } deriving (Show, Eq)
 
 -- | Plot contains information about a regression estimate.
 data Plot a = Plot 
@@ -35,7 +35,7 @@ data Plot a = Plot
    , residuals :: Matrix a       -- ^ Estimation residuals
    , correlation :: Correlation  -- ^ The used correlation for the plot 
    , base :: Base a              -- ^ The measured base for the regression
-   }
+   } deriving Eq
 
 type Row = Int
 type Column = Int
