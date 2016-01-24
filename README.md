@@ -1,6 +1,6 @@
-### Time series analysis and forecasting library
+# Time series analysis and forecasting library
 
-# How to build?
+## How to build?
 - Clone the repository.
 - Initialize the matrix submodule:
 ```
