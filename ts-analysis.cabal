@@ -27,6 +27,7 @@ Test-suite regression-tests
    type:             exitcode-stdio-1.0
    main-is:          RegressionTest.hs
    hs-source-dirs:   test, src
+   other-modules:    Regression, TestExtension, TestValues
    build-depends:    base >=4.8,
                      ts-analysis,
                      test-framework >= 0.3.3,

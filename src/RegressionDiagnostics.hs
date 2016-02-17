@@ -89,14 +89,8 @@ permutationTest' tester plotter base targets n perm holder =
 -- * Test functions
 
 -- | R squared, cofficient of determination
---   TODO: use the mse, sst, sse functions in Regression instead
 rsquared :: Floating a => Plot a -> a
-rsquared plot = 1.0 - (sse / sst)
-   where sse = sum $ map (** 2) res
-         sst = sum $ map ((** 2) . subtract (mean ys')) ys'
-         ys' = toList . ys . base $ plot
-         res = toList . residuals $ plot
-         mean xs' = sum xs' / fromIntegral (length xs')
+rsquared plot = 1.0 - ( sse plot / sst plot)
 
 -- | Cooks distance function for observations specified on row.
 cooks :: (Floating a, Ord a) => Row -> Plot a -> Maybe a
