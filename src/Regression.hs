@@ -148,6 +148,8 @@ plotFromMatrix :: (Ord a, Eq a, Fractional a)
    -> Maybe (Plot a) -- ^ Maybe the estimated plot
 plotFromMatrix Linear xs y = liftM (plot xs y Linear) (leastSquaresEstimator xs y)
 
+-- | Calculates a least squares Plot based on a Base that combines
+--   data matrices. See 'plotFromMatrix' and 'Base'.
 plotFromBase :: (Ord a, Eq a, Fractional a)
    => Correlation
    -> Base a
