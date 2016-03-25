@@ -116,6 +116,14 @@ subbase base row
                            in fromLists ((init . fst) splits ++ snd splits)
          splitArrays = splitAt (row Prelude.+ 1) . toLists
 
+-- | Amount of independent variables in a plot
+amountOfIndependents :: Num a => Plot a -> Int
+amountOfIndependents plot = ((subtract 1) . ncols . xs. base) plot
+
+-- | Size of the dataset a plot is based on
+sizeOfDataset :: Num a => Plot a -> Int
+sizeOfDataset = nrows . xs . base
+
 -- | Allows combinations of correlation types.
 (+) :: Correlation -> Correlation -> [Correlation]
 (+) a b = a : [b]

@@ -18,7 +18,7 @@ import Data.Function
 
 import Control.Monad (liftM)
 
-import Regression
+import Regression hiding ((+))
 
 -- * Statistical utilities
 
@@ -100,7 +100,22 @@ cooks row fullPlot = (\x -> x / (k * mse fullPlot)) <$> liftM (sum . map (** 2) 
          diffMatrix = liftM ((-) <$> values fullPlot <*>) partialFits
          k = (fromIntegral . ncols) $ (xs . base) fullPlot
 
--- * Permutation Tests
+-- | Chow test for split dataset. The first parameter should
+--   be a plot built with the whole dataset and the last two
+--   plots should be built with the split datasets.
+chows :: (Floating a, Ord a) 
+   => Plot a   -- ^ Complete plot
+   -> Plot a   -- ^ Partial plot 1
+   -> Plot a   -- ^ Partial plot 2
+   -> Maybe a  -- ^ Chow test value
+chows x y z = if k1 /= k2 || k2 /= k3
+   then Nothing
+   else Just $ ((n-2*(k+1))/(k+1))*((sse x - sse y - sse z)/(sse y + sse z))
+   where k1 = amountOfIndependents x
+         k2 = amountOfIndependents y
+         k3 = amountOfIndependents z
+         k = fromIntegral k1
+         n = fromIntegral $ sizeOfDataset x
 
 -- | Function approximates the significance of a regression coefficient.
 --   It takes a confidence level 'alpha' that is used to calculate a
