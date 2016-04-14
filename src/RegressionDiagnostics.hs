@@ -94,10 +94,10 @@ rsquared plot = 1.0 - ( sse plot / sst plot)
 
 -- | Cooks distance function for observations specified on row.
 cooks :: (Floating a, Ord a) => Row -> Plot a -> Maybe a
-cooks row fullPlot = (\x -> x / (k * mse fullPlot)) <$> liftM (sum . map (** 2) . toList) diffMatrix
+cooks row fullPlot = (\x -> x / (k * mse fullPlot)) <$> fmap (sum . map (** 2) . toList) diffMatrix
    where partialPlot = subplot fullPlot row
-         partialFits = liftM (\x -> calculateFittedValues (coefs x) (xs . base $ fullPlot)) partialPlot
-         diffMatrix = liftM ((-) <$> values fullPlot <*>) partialFits
+         partialFits = fmap (\x -> calculateFittedValues (coefs x) (xs . base $ fullPlot)) partialPlot
+         diffMatrix = fmap ((-) <$> values fullPlot <*>) partialFits
          k = (fromIntegral . ncols) $ (xs . base) fullPlot
 
 -- | Chow test for split dataset. The first parameter should
@@ -106,7 +106,7 @@ cooks row fullPlot = (\x -> x / (k * mse fullPlot)) <$> liftM (sum . map (** 2) 
 chows :: (Floating a, Ord a) 
    => Plot a   -- ^ Complete plot
    -> Plot a   -- ^ Partial plot 1
-   -> Plot a   -- ^ Partial plot 2
+   -> Plot a   -- ^ Compliment of partial plot 1
    -> Maybe a  -- ^ Chow test value
 chows x y z = if k1 /= k2 || k2 /= k3
    then Nothing
@@ -116,6 +116,8 @@ chows x y z = if k1 /= k2 || k2 /= k3
          k3 = amountOfIndependents z
          k = fromIntegral k1
          n = fromIntegral $ sizeOfDataset x
+
+-- * Tests
 
 -- | Function approximates the significance of a regression coefficient.
 --   It takes a confidence level 'alpha' that is used to calculate a

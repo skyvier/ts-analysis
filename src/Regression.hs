@@ -116,9 +116,34 @@ subbase base row
                            in fromLists ((init . fst) splits ++ snd splits)
          splitArrays = splitAt (row Prelude.+ 1) . toLists
 
+-- | Splits a base to a subbase and compliment according
+--   to the instructions of the row list. Operation is
+--   persistent and will simply ignore impossible instructions.
+splitBase :: Num a
+   => Base a                  -- ^ The base to split
+   -> [Int]                   -- ^ The rows to include in the new base
+   -> (Base a, Base a)        -- ^ Maybe the new base and its compliment
+splitBase base rows = (baseFromLists sys sxs, baseFromLists sys' sxs')
+   where (sxs', sxs) = moveElems rows (toLists $ xs base) []
+         (sys', sys) = moveElems rows (toLists $ ys base) []
+         baseFromLists yss xss = Base (fromLists yss) (fromLists xss)
+
+moveElems :: Num a
+   => [Int]          -- ^ Indices to move to target (0,1,2,...)
+   -> [[a]]          -- ^ Source
+   -> [[a]]          -- ^ Target
+   -> ([[a]], [[a]]) -- ^ Results after moves
+moveElems is s t = (removeIndices is s, subList is s t)
+
+subList :: [Int] -> [a] -> [a] -> [a]
+subList is s t = foldl (\acc (x, i) -> if i `elem` is then x:acc else acc) t (zip s [0..])
+
+removeIndices :: [Int] -> [a] -> [a]
+removeIndices is xs = foldl (\acc (x, i) -> if i `elem` is then acc else x:acc) [] (zip xs [0..])
+
 -- | Amount of independent variables in a plot
 amountOfIndependents :: Num a => Plot a -> Int
-amountOfIndependents plot = ((subtract 1) . ncols . xs. base) plot
+amountOfIndependents = (subtract 1) . ncols . xs. base
 
 -- | Size of the dataset a plot is based on
 sizeOfDataset :: Num a => Plot a -> Int
@@ -154,7 +179,7 @@ plotFromMatrix :: (Ord a, Eq a, Fractional a)
    -> Matrix a       -- ^ Regressor matrix (independent variables)
    -> Matrix a       -- ^ Dependent variable vector
    -> Maybe (Plot a) -- ^ Maybe the estimated plot
-plotFromMatrix Linear xs y = liftM (plot xs y Linear) (leastSquaresEstimator xs y)
+plotFromMatrix Linear xs y = fmap (plot xs y Linear) (leastSquaresEstimator xs y)
 
 -- | Calculates a least squares Plot based on a Base that combines
 --   data matrices. See 'plotFromMatrix' and 'Base'.
